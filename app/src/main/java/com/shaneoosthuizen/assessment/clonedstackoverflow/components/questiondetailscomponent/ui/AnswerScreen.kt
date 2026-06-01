@@ -8,12 +8,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.sharp.KeyboardDoubleArrowLeft
+import androidx.compose.material.icons.sharp.SignalCellularAlt
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
+import com.shaneoosthuizen.assessment.clonedstackoverflow.ui.theme.AppTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Answer
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Comment
-import com.shaneoosthuizen.assessment.clonedstackoverflow.core.ui.HtmlView
+import com.shaneoosthuizen.assessment.clonedstackoverflow.core.htmlviewer.HtmlView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -45,6 +53,29 @@ fun AnswerScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(
+            onClick = onBack,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = AppTheme.colors.button,
+                    contentColor = AppTheme.colors.text,
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Sharp.KeyboardDoubleArrowLeft,
+                contentDescription = "Back"
+            )
+        }
+            Text(
+                text = "Answer Details",
+                style = AppTheme.typography.headlineSmall,
+                color = AppTheme.colors.overflowOrange,
+                modifier = Modifier.weight(1f)
+            )
+        }
         when {
             isLoading -> Box(
                 modifier = Modifier.weight(1f).fillMaxWidth(),
@@ -56,7 +87,7 @@ fun AnswerScreen(
                 modifier = Modifier.weight(1f).fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error: $error", color = MaterialTheme.colorScheme.error)
+                Text("Error: $error", color = AppTheme.colors.error)
             }
             answer != null -> AnswerContent(
                 answer = answer!!,
@@ -71,7 +102,16 @@ fun AnswerScreen(
             }
         }
 
-        Button(onClick = onBack, modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+        Button(
+            onClick = onBack,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = AppTheme.colors.button,
+                contentColor = AppTheme.colors.text,
+            )
+        ) {
             Text("Back")
         }
     }
@@ -85,34 +125,53 @@ fun AnswerContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(text = answer.author, style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier
+                .fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    Text(
+                        text = "Author: ${answer.author}",
+                        style = AppTheme.typography.titleMedium,
+                        color = AppTheme.colors.username
+                    )
                     Text(
                         text = "Posted: ${formatAnswerDate(answer.creationDate)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.button
                     )
                 }
                 if (answer.isAccepted) {
                     Text(
                         text = "✓ Accepted",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.primary
+                        style = AppTheme.typography.labelSmall,
+                        color = AppTheme.colors.answered
                     )
                 }
             }
             Text(
                 text = "Score: ${answer.score}",
-                style = MaterialTheme.typography.labelSmall,
+                style = AppTheme.typography.labelSmall,
+                color = AppTheme.colors.text,
                 modifier = Modifier.padding(top = 4.dp)
             )
-            HorizontalDivider(modifier = Modifier.padding(vertical = 10.dp))
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 10.dp),
+                color = AppTheme.colors.overflowOrange
+            )
             HtmlView(html = answer.body, modifier = Modifier.fillMaxWidth())
-            HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(vertical = 12.dp),
+                color = AppTheme.colors.overflowOrange
+            )
             Text(
                 text = "Comments (${comments.size})",
-                style = MaterialTheme.typography.titleSmall,
+                style = AppTheme.typography.titleSmall,
+                color = AppTheme.colors.overflowOrange,
                 modifier = Modifier.padding(bottom = 8.dp)
             )
         }
@@ -121,8 +180,8 @@ fun AnswerContent(
             item {
                 Text(
                     "No comments",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.text
                 )
             }
         } else {
@@ -135,31 +194,37 @@ fun AnswerContent(
 
 @Composable
 fun CommentCard(comment: Comment) {
-    Card(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 3.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = AppTheme.colors.cardBackground,
+        ),
+        ) {
         Column(modifier = Modifier.padding(10.dp)) {
             Row {
                 Text(
                     text = comment.author,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = AppTheme.typography.labelMedium,
+                    color = AppTheme.colors.username,
                     modifier = Modifier.weight(1f)
                 )
-                if (comment.score > 0) {
                     Text(
-                        text = "▲ ${comment.score}",
-                        style = MaterialTheme.typography.labelSmall
+                        text = "Score: ${comment.score}",
+                        style = AppTheme.typography.labelSmall,
+                        color = AppTheme.colors.text,
                     )
-                }
             }
             Text(
                 text = comment.body,
-                style = MaterialTheme.typography.bodySmall,
+                style = AppTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp)
             )
             Text(
                 text = formatAnswerDate(comment.creationDate),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.secondary,
+                style = AppTheme.typography.bodySmall,
+                color = AppTheme.colors.button,
                 modifier = Modifier.padding(top = 2.dp)
             )
         }

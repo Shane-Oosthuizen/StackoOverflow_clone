@@ -1,7 +1,8 @@
-package com.shaneoosthuizen.assessment.clonedstackoverflow.core.cache
+package com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.domain
 
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Answer
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Question
+
 
 interface OfflineCacheRepository {
     suspend fun cacheQuestion(question: Question, answers: List<Answer>)

@@ -1,58 +1,96 @@
 package com.shaneoosthuizen.assessment.clonedstackoverflow.ui.theme
 
-import android.app.Activity
-import android.os.Build
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import com.shaneoosthuizen.assessment.clonedstackoverflow.R
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+data class AppIcon(
+    @DrawableRes val logo : Int
+)
+data class AppColors(
+    val background: Color,
+    val cardBackground: Color,
+    val codeBlock: Color,
+    val overflowOrange: Color,
+    val text: Color,
+    val questionTitle: Color,
+    val button: Color,
+    val answered: Color,
+    val tag: Color,
+    val title: Color,
+    val username: Color,
+    val error: Color
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val lightIcon = AppIcon(
+    logo = R.drawable.light_stack_overflow_logo
 )
+
+private val darkIcon = AppIcon(
+    logo = R.drawable.dark_stack_overflow_logo
+)
+
+private val LightColorScheme = AppColors(
+    background = LightBackground,
+    cardBackground = LightCard,
+    codeBlock = LightCodeBlock,
+    text = LightText,
+    overflowOrange = StackOverflowOrange,
+    questionTitle = LightQuestionTitle,
+    button = StackOverflowButton,
+    answered = StackOverflowAnswered,
+    tag = StackOverflowTag,
+    title = StackOverflowTitle,
+    username = StackOverflowUsername,
+    error = StackOverflowError
+)
+
+private val DarkColorScheme = AppColors(
+    background = DarkBackground,
+    cardBackground = DarkCard,
+    codeBlock = DarkCodeBlock,
+    text = DarkText,
+    overflowOrange = StackOverflowOrange,
+    questionTitle = DarkQuestionTitle,
+    button = StackOverflowButton,
+    answered = StackOverflowAnswered,
+    tag = StackOverflowTag,
+    title = StackOverflowTitle,
+    username = StackOverflowUsername,
+    error = StackOverflowError
+)
+
+val LocalAppColors = staticCompositionLocalOf { LightColorScheme }
+val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
+
+val LocalAppIcon = staticCompositionLocalOf { darkIcon }
+object AppTheme {
+    val colors: AppColors
+        @Composable get() = LocalAppColors.current
+    val typography: AppTypography
+        @Composable get() = LocalAppTypography.current
+
+    val icon: AppIcon
+        @Composable get() = LocalAppIcon.current
+}
 
 @Composable
 fun ClonedStackOverflowTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colors = if (darkTheme) DarkColorScheme else LightColorScheme
+    val icon = if (darkTheme) lightIcon else darkIcon
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    CompositionLocalProvider(
+        LocalAppColors provides colors,
+        LocalAppIcon provides icon,
+        LocalAppTypography provides AppTypography()
+    ) {
+        content()
     }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
 }

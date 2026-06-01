@@ -69,6 +69,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.html)
 
     ksp(libs.hilt.compiler)
     ksp(libs.room.compiler)

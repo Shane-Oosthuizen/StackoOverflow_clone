@@ -11,9 +11,9 @@ import javax.inject.Inject
 class SearchDataSource @Inject constructor(
     private val apiService: SearchApiService
 ) {
-    fun getQuestions(): Flow<List<Question>> = flow {
+    fun getQuestions(questionAmount:Int): Flow<List<Question>> = flow {
         try {
-            val questions = apiService.getQuestions().items.map { it.toDomain() }
+            val questions = apiService.getQuestions(pageSize = questionAmount).items.map { it.toDomain() }
             emit(questions)
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", "getQuestions failed: ${e.message}")
@@ -25,23 +25,35 @@ class SearchDataSource @Inject constructor(
         try {
             val questions = apiService.searchTopic(
                 topic.SearchText,
-                topic.Sort.value,   //  Changed from .name.lowercase() -> yields "activity", "votes", etc.
-                topic.Order.value,  //  Changed from .name.lowercase() -> yields "asc" or "desc"
+                topic.Sort.value,
+                topic.Order.value,
                 topic.PageSize.toString()
             ).items.map { it.toDomain() }
-
             emit(questions)
         } catch (e: retrofit2.HttpException) {
             val errorBody = e.response()?.errorBody()?.string()
-            android.util.Log.e("API_ERROR", "HTTP 400 Details: $errorBody")
-            emit(emptyList()) // Safely recover from the error stream
+            android.util.Log.e("API_ERROR", "HTTP Details: $errorBody")
+            emit(emptyList())
         } catch (e: Exception) {
             android.util.Log.e("API_ERROR", "Generic Error: ${e.localizedMessage}")
             emit(emptyList())
         }
     }
 
-    suspend fun saveQuestionForOffline(question: Question) {
-        // TODO: implement Room persistence
+
+     fun searchTag(tag: String): Flow<List<Question>> = flow {
+       try{
+           val questions = apiService.searchTag(
+               tag
+           ).items.map { it.toDomain() }
+           emit(questions)
+       }catch (e: retrofit2.HttpException) {
+           val errorBody = e.response()?.errorBody()?.string()
+           android.util.Log.e("API_ERROR", "HTTP Details: $errorBody")
+           emit(emptyList())
+       } catch (e: Exception) {
+           android.util.Log.e("API_ERROR", "Generic Error: ${e.localizedMessage}")
+           emit(emptyList())
+       }
     }
 }

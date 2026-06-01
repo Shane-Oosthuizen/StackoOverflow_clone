@@ -13,7 +13,9 @@ interface SearchApiService {
     suspend fun getQuestions(
         @Query("order") order: String = OrderEnum.DESCENDING.toString(),
         @Query("sort") sort: String = SortEnum.ACTIVITY.toString(),
-        @Query("site") site: String = "stackoverflow"
+        @Query("site") site: String = "stackoverflow",
+        @Query("filter") filter: String = "withbody",
+        @Query("pagesize") pageSize: Int
     ): QuestionsResponse
 
     @GET("/2.3/search/advanced?site=stackoverflow&filter=withbody")
@@ -22,5 +24,10 @@ interface SearchApiService {
         @Query("sort") sortBy: String,
         @Query("order") sortOrder: String,
         @Query("pagesize") pageSize: String
+    ): QuestionsResponse
+
+    @GET("/2.3/search/advanced?site=stackoverflow&filter=withbody")
+    suspend fun searchTag(
+        @Query("tagged") searchText: String,
     ): QuestionsResponse
 }

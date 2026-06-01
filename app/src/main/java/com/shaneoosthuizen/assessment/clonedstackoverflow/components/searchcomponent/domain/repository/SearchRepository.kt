@@ -5,7 +5,8 @@ import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcompo
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    fun getQuestions(): Flow<List<Question>>
+    fun getQuestions(questionAmount : Int): Flow<List<Question>>
     fun searchTopic(topic: Search, ): Flow<List<Question>>
-    suspend fun saveQuestionForOffline(question: Question)
+
+    fun searchTag(tag: String): Flow<List<Question>>
 }

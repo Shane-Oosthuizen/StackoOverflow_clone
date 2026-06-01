@@ -1,9 +1,10 @@
-package com.shaneoosthuizen.assessment.clonedstackoverflow.core.ui
+package com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.domain.OfflineCacheRepository
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Question
-import com.shaneoosthuizen.assessment.clonedstackoverflow.core.cache.OfflineCacheRepository
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -3,8 +3,7 @@ package com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomp
 enum class SortEnum(val value: String, val displayName: String) {
     ACTIVITY("activity", "Activity"),
     CREATION("creation", "Creation"),
-    VOTES("votes", "Votes"),
-    RELEVANCE("relevance", "Relevance");
+    VOTES("votes", "Votes");
 
     override fun toString(): String {
         return value

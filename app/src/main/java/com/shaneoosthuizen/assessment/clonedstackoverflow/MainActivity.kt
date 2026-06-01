@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
@@ -25,16 +26,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.ui.OfflineScreen
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.ui.AnswerScreen
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.ui.QuestionScreen
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.ui.SearchScreen
-import com.shaneoosthuizen.assessment.clonedstackoverflow.core.ui.OfflineScreen
+import com.shaneoosthuizen.assessment.clonedstackoverflow.ui.theme.AppTheme
 import com.shaneoosthuizen.assessment.clonedstackoverflow.ui.theme.ClonedStackOverflowTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @Composable
-fun ClonedStackOverflowApp(modifier: Modifier = Modifier,isConnected: Boolean) {
+fun ClonedStackOverflowApp(modifier: Modifier = Modifier, isConnected: Boolean) {
     val navController = rememberNavController()
+    var showOfflineDialog by remember { mutableStateOf(true) }
 
     NavHost(
         navController = navController,
@@ -73,14 +76,20 @@ fun ClonedStackOverflowApp(modifier: Modifier = Modifier,isConnected: Boolean) {
                 onBack = { navController.popBackStack() }
             )
         }
+
         composable(Routes.OFFLINE_SCREEN) {
             OfflineScreen(
-                onQuestionSelected = { navController.navigate(Routes.questionSelectedScreen(it)) },
-                onBack = { navController.popBackStack() }
+                onQuestionSelected = {
+                    navController.navigate(Routes.questionSelectedScreen(it))
+                },
+                onBack = {
+                    navController.popBackStack()
+                    if(!isConnected) showOfflineDialog = true
+                }
             )
         }
     }
-    var showOfflineDialog by remember { mutableStateOf(true) }
+
 
     LaunchedEffect(isConnected) {
         if (!isConnected) showOfflineDialog = true
@@ -88,9 +97,9 @@ fun ClonedStackOverflowApp(modifier: Modifier = Modifier,isConnected: Boolean) {
 
     if (!isConnected && showOfflineDialog) {
         AlertDialog(
-            onDismissRequest = { showOfflineDialog = false },
+            onDismissRequest = {},
             title = { Text("No Internet Connection") },
-            text = { Text("You're offline. Browse your cached questions.") },
+            text = { Text("You're offline. using Offline mode you can browse questions you have already opened in the past.") },
             confirmButton = {
                 Button(onClick = {
                     showOfflineDialog = false
@@ -116,10 +125,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             val isConnected by StackOverflowApplicationViewModel.isConnected.collectAsState()
             ClonedStackOverflowTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ClonedStackOverflowApp(modifier = Modifier.padding(innerPadding), isConnected = isConnected)
-                    }
+                Scaffold(modifier = Modifier
+                    .fillMaxSize()) { innerPadding ->
+                    ClonedStackOverflowApp(
+                        modifier = Modifier
+                            .background(AppTheme.colors.background)
+                            .padding(innerPadding),
+                        isConnected = isConnected
+                    )
                 }
             }
         }
     }
+}

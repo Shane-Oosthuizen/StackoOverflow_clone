@@ -8,6 +8,7 @@ import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcompo
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.models.SearchTypeEnum
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.models.SortEnum
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.repository.SearchRepository
+import com.shaneoosthuizen.assessment.clonedstackoverflow.core.networkmonitor.NetworkMonitor
 import com.shaneoosthuizen.assessment.clonedstackoverflow.dependencies.SharedPreferencesManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,10 +20,16 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: SearchRepository,
+    private val connection: NetworkMonitor,
     private val prefs: SharedPreferencesManager
 ) : ViewModel() {
+    private val _isConnected = MutableStateFlow(false)
+    val isConnected: StateFlow<Boolean> = _isConnected
     private val _searchText = MutableStateFlow("")
     val searchText: StateFlow<String> = _searchText
+
+    private val _questionAmount = MutableStateFlow(prefs.questionListAmount)
+    val questionAmount: StateFlow<Int> = _questionAmount
 
     private val _searchSortOption = MutableStateFlow(prefs.searchSort)
     val searchSortOption: StateFlow<SortEnum> = _searchSortOption
@@ -46,21 +53,30 @@ class SearchViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    init {
-        getQuestions()
-    }
+        init {
+            connectionWatcher()
+        }
 
+    fun connectionWatcher() {
+        viewModelScope.launch(Dispatchers.IO) {
+            connection.isConnected.collect { isConnected ->
+                if (isConnected) {
+                    _isConnected.value = true
+                    getQuestions()
+                }
+            }
+        }
+    }
     fun getQuestions() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             try {
-                repository.getQuestions().collect { questions ->
+                repository.getQuestions(_questionAmount.value).collect { questions ->
                     _questions.value = questions
                     sortQuestions()
                 }
             } catch (e: Exception) {
                 android.util.Log.e("SearchViewModel", "getQuestions FAILED: ${e.message}", e)
-                // temporarily rethrow to see full crash details:
                 throw e
             } finally {
                 _isLoading.value = false
@@ -70,6 +86,17 @@ class SearchViewModel @Inject constructor(
 
     fun updateSearchText(newText: String) {
         _searchText.value = newText
+    }
+
+    fun updatePageSize(size: Int) {
+        _questionAmount.value = size
+        prefs.questionSearchAmount = size
+    }
+
+    fun updateQuestionList(size: Int){
+        _questionAmount.value = size
+         prefs.questionListAmount = size
+         getQuestions()
     }
 
     fun updateSearchSortOption(sort: SortEnum) {
@@ -88,14 +115,13 @@ class SearchViewModel @Inject constructor(
     }
 
     fun performSearch() {
-        if (_searchText.value.isBlank()) return  // do nothing, don't touch questions list
-
+        if (_searchText.value.isBlank()) return
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             try {
                 val search = Search(
                     SearchText = _searchText.value,
-                    PageSize = 20,
+                    PageSize = _questionAmount.value,
                     Order = _searchOrderOption.value,
                     Sort = _searchSortOption.value,
                     SearchType = _searchType.value
@@ -105,6 +131,23 @@ class SearchViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 android.util.Log.e("SearchViewModel", "Search failed: ${e.message}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun searchTag(tag: String) {
+        if (tag.isBlank()) return
+        _searchText.value = "[ $tag ]"
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.value = true
+            try {
+                repository.searchTag(tag).collect { results ->
+                    _questions.value = results
+                }
+            } catch (e: Exception) {
+                android.util.Log.e("SearchViewModel", "Search by tag failed: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -128,7 +171,6 @@ class SearchViewModel @Inject constructor(
             SortEnum.ACTIVITY -> _questions.value.sortedBy { it.lastActivityDate }
             SortEnum.VOTES -> _questions.value.sortedBy { it.score }
             SortEnum.CREATION -> _questions.value.sortedBy { it.creationDate }
-            SortEnum.RELEVANCE -> _questions.value.toList()
         }
 
         _questions.value = if (_orderQuestionOption.value == OrderEnum.ASCENDING) {

@@ -37,6 +37,14 @@ class SharedPreferencesManager @Inject constructor(
         }
         set(type) = prefs.edit().putString("search_type", type.value).apply()
 
+    var questionSearchAmount: Int
+        get() = prefs.getInt("search_page_size", 20)
+        set(size) = prefs.edit().putInt("search_page_size", size).apply()
+
+    var questionListAmount: Int
+        get() = prefs.getInt("question_list_page_size", 20)
+        set(size) = prefs.edit().putInt("question_list_page_size", size).apply()
+
     var questionSort: SortEnum
         get() {
             val value = prefs.getString("question_sort", SortEnum.VOTES.value)

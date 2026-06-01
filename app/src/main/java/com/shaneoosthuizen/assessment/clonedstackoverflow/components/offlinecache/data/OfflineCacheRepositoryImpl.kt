@@ -1,11 +1,13 @@
-package com.shaneoosthuizen.assessment.clonedstackoverflow.core.cache
+package com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.data
 
-import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Answer
-import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Question
 import com.shaneoosthuizen.assessment.clonedstackoverflow.core.database.AnswerEntity
 import com.shaneoosthuizen.assessment.clonedstackoverflow.core.database.QuestionEntity
 import com.shaneoosthuizen.assessment.clonedstackoverflow.core.database.dao.AnswerDao
 import com.shaneoosthuizen.assessment.clonedstackoverflow.core.database.dao.QuestionDao
+import com.shaneoosthuizen.assessment.clonedstackoverflow.components.offlinecache.domain.OfflineCacheRepository
+import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Answer
+import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Question
+
 import javax.inject.Inject
 
 private const val CACHE_LIMIT = 10

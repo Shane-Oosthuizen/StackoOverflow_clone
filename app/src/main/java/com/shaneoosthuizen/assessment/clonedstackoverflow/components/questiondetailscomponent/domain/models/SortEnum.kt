@@ -1,10 +1,9 @@
 package com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models
 
-enum class SortEnum(val value : String) {
-    ACTIVITY("activity"),
-    CREATION("creation"),
-    VOTES("votes"),
-    RELEVANCE("relevance");
+enum class SortEnum(val value: String, val displayName: String) {
+    ACTIVITY("activity", "Activity"),
+    CREATION("creation", "Creation"),
+    VOTES("votes", "Votes");
 
     override fun toString(): String {
         return value
