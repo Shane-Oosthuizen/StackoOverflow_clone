@@ -9,7 +9,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 data class AppIcon(
-    @DrawableRes val logo : Int
+    @DrawableRes val logo : Int,
+    @DrawableRes val appIcon: Int
 )
 data class AppColors(
     val background: Color,
@@ -27,11 +28,13 @@ data class AppColors(
 )
 
 private val lightIcon = AppIcon(
-    logo = R.drawable.light_stack_overflow_logo
+    logo = R.drawable.light_stack_overflow_logo,
+    appIcon = R.drawable.ic_launcher_foreground
 )
 
 private val darkIcon = AppIcon(
-    logo = R.drawable.dark_stack_overflow_logo
+    logo = R.drawable.dark_stack_overflow_logo,
+    appIcon = R.drawable.ic_launcher_foreground
 )
 
 private val LightColorScheme = AppColors(

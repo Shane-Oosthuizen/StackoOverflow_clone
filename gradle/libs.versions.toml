@@ -16,6 +16,7 @@ hilt = "2.59.2"
 retrofit = "2.11.0"
 animation = "1.11.2"
 markwon = "4.6.2"
+coil = "3.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,7 +48,8 @@ retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ver
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
 markwon-core = { group = "io.noties.markwon", name = "core", version.ref = "markwon" }
 markwon-html = { group = "io.noties.markwon", name = "html", version.ref = "markwon" }
-markwon-syntax = { group = "io.noties.markwon", name = "syntax-highlight", version.ref = "markwon" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 
 
 [plugins]

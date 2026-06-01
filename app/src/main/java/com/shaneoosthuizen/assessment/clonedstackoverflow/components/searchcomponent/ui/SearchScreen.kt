@@ -65,7 +65,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.shaneoosthuizen.assessment.clonedstackoverflow.R
+import coil3.compose.AsyncImage
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.models.OrderEnum
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.models.Question
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.searchcomponent.domain.models.SearchTypeEnum
@@ -512,12 +512,24 @@ fun QuestionCard(
                 style = AppTheme.typography.titleMedium,
                 color = AppTheme.colors.title
             )
-            Text(
-                text = "by ${question.author}",
-                style = AppTheme.typography.bodySmall,
-                color = AppTheme.colors.username,
-                modifier = Modifier.padding(top = 2.dp)
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AsyncImage(
+                        model = question.profileImage,
+                        contentDescription = "Author profile picture",
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Text(
+                        text = "by ${question.author}",
+                        style = AppTheme.typography.bodySmall,
+                        color = AppTheme.colors.username,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
             Row(
                 modifier = Modifier.padding(top = 6.dp)
             ) {

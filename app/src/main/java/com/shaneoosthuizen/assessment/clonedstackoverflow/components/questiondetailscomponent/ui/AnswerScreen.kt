@@ -1,11 +1,13 @@
 package com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Answer
 import com.shaneoosthuizen.assessment.clonedstackoverflow.components.questiondetailscomponent.domain.models.Comment
 import com.shaneoosthuizen.assessment.clonedstackoverflow.core.htmlviewer.HtmlView
@@ -144,11 +147,22 @@ fun AnswerContent(
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    Text(
-                        text = "Author: ${answer.author}",
-                        style = AppTheme.typography.titleMedium,
-                        color = AppTheme.colors.username
-                    )
+                    Row(
+                        modifier = Modifier.padding(bottom = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        AsyncImage(
+                            model = answer.profileImage,
+                            contentDescription = "Author profile picture",
+                            modifier = Modifier.size(32.dp)
+                        )
+                        Text(
+                            text = "by ${answer.author}",
+                            style = AppTheme.typography.bodyMedium,
+                            color = AppTheme.colors.username,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                     Text(
                         text = "Posted: ${formatAnswerDate(answer.creationDate)}",
                         style = AppTheme.typography.bodySmall,
@@ -217,19 +231,31 @@ fun CommentCard(comment: Comment) {
         )
     ) {
         Column(
-            modifier = Modifier.padding(10.dp)
+            modifier = Modifier.padding(10.dp),
+            verticalArrangement = Arrangement.Center
         ) {
-            Row {
-                Text(
-                    text = comment.author,
-                    style = AppTheme.typography.labelMedium,
-                    color = AppTheme.colors.username,
-                    modifier = Modifier.weight(1f)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = comment.profileImage,
+                    contentDescription = "Author profile picture",
+                    modifier = Modifier.size(24.dp)
                 )
                 Text(
-                    text = "Score: ${comment.score}",
+                    text = "by ${comment.author}",
+                    style = AppTheme.typography.bodySmall,
+                    color = AppTheme.colors.username,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp)
+                )
+                Text(
+                    "comments: ${comment.score}",
                     style = AppTheme.typography.labelSmall,
-                    color = AppTheme.colors.text,
+                    color = AppTheme.colors.button,
+                    modifier = Modifier.padding(end = 8.dp)
                 )
             }
             Text(

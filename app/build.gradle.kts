@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.markwon.core)
     implementation(libs.markwon.html)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     ksp(libs.hilt.compiler)
     ksp(libs.room.compiler)
