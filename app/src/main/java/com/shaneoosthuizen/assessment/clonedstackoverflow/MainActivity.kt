@@ -84,12 +84,11 @@ fun ClonedStackOverflowApp(modifier: Modifier = Modifier, isConnected: Boolean) 
                 },
                 onBack = {
                     navController.popBackStack()
-                    if(!isConnected) showOfflineDialog = true
+                    if (!isConnected) showOfflineDialog = true
                 }
             )
         }
     }
-
 
     LaunchedEffect(isConnected) {
         if (!isConnected) showOfflineDialog = true
@@ -101,10 +100,12 @@ fun ClonedStackOverflowApp(modifier: Modifier = Modifier, isConnected: Boolean) 
             title = { Text("No Internet Connection") },
             text = { Text("You're offline. using Offline mode you can browse questions you have already opened in the past.") },
             confirmButton = {
-                Button(onClick = {
-                    showOfflineDialog = false
-                    navController.navigate(Routes.OFFLINE_SCREEN)
-                }) {
+                Button(
+                    onClick = {
+                        showOfflineDialog = false
+                        navController.navigate(Routes.OFFLINE_SCREEN)
+                    }
+                ) {
                     Text("Open Offline Mode")
                 }
             }
@@ -125,8 +126,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             val isConnected by StackOverflowApplicationViewModel.isConnected.collectAsState()
             ClonedStackOverflowTheme {
-                Scaffold(modifier = Modifier
-                    .fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) { innerPadding ->
                     ClonedStackOverflowApp(
                         modifier = Modifier
                             .background(AppTheme.colors.background)

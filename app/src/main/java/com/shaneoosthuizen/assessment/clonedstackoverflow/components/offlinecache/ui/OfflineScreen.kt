@@ -35,9 +35,11 @@ fun OfflineScreen(
 ) {
     val questions by viewModel.cachedQuestions.collectAsState()
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(
             "Cached Questions",
             style = AppTheme.typography.titleLarge,
@@ -65,7 +67,9 @@ fun OfflineScreen(
                 )
             }
         } else {
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
                 items(questions) { question ->
                     CachedQuestionCard(
                         question = question,
@@ -75,15 +79,16 @@ fun OfflineScreen(
             }
         }
 
-        Button(onClick = onBack, modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp),
+        Button(
+            onClick = onBack,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = AppTheme.colors.button,
                 contentColor = AppTheme.colors.text,
             )
-            )
-        {
+        ) {
             Text(
                 text = "Back",
                 color = AppTheme.colors.text,
@@ -103,14 +108,17 @@ private fun CachedQuestionCard(question: Question, onClick: () -> Unit) {
             containerColor = AppTheme.colors.cardBackground
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
             Text(
                 question.title,
                 style = AppTheme.typography.titleMedium,
                 color = AppTheme.colors.questionTitle
             )
             Text(
-                "by ${question.author}", style = AppTheme.typography.bodySmall,
+                "by ${question.author}",
+                style = AppTheme.typography.bodySmall,
                 color = AppTheme.colors.username,
                 modifier = Modifier.padding(top = 2.dp)
             )

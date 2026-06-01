@@ -85,32 +85,33 @@ fun QuestionScreen(
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth(),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
-        ){IconButton(
-            onClick = onBack,
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = AppTheme.colors.button,
-                contentColor = AppTheme.colors.text,
-            )
         ) {
-            Icon(
-                imageVector = Icons.Sharp.KeyboardDoubleArrowLeft,
-                contentDescription = "Back"
-            )
-        }
+            IconButton(
+                onClick = onBack,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = AppTheme.colors.button,
+                    contentColor = AppTheme.colors.text,
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Sharp.KeyboardDoubleArrowLeft,
+                    contentDescription = "Back"
+                )
+            }
             Text(
                 text = "Question Details",
                 style = AppTheme.typography.headlineSmall,
                 color = AppTheme.colors.overflowOrange,
                 modifier = Modifier.weight(1f)
             )
-
         }
         when {
             isLoading -> Box(
-                Modifier
+                modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -119,7 +120,7 @@ fun QuestionScreen(
             }
 
             error != null -> Box(
-                Modifier
+                modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -137,9 +138,10 @@ fun QuestionScreen(
             )
 
             else -> Box(
-                Modifier
+                modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth(), contentAlignment = Alignment.Center
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
                 Text("No data")
             }
@@ -159,7 +161,7 @@ fun QuestionScreen(
                     containerColor = AppTheme.colors.button,
                     contentColor = AppTheme.colors.text,
                 )
-            ){
+            ) {
                 Text("Back")
             }
         }
@@ -187,9 +189,12 @@ fun QuestionContent(
         Text(
             text = "by ${question.author}",
             style = AppTheme.typography.bodySmall,
-            color = AppTheme.colors.username, modifier = Modifier.padding(top = 2.dp)
+            color = AppTheme.colors.username,
+            modifier = Modifier.padding(top = 2.dp)
         )
-        Row(modifier = Modifier.padding(vertical = 6.dp)) {
+        Row(
+            modifier = Modifier.padding(vertical = 6.dp)
+        ) {
             Text(
                 text = "Score: ${question.score}",
                 style = AppTheme.typography.labelSmall,
@@ -220,19 +225,25 @@ fun QuestionContent(
             }
         }
 
-        HorizontalDivider(modifier = Modifier
-            .padding(top = 10.dp),
-            color = AppTheme.colors.overflowOrange)
-        Row(modifier = Modifier
-            .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically){
+        HorizontalDivider(
+            modifier = Modifier
+                .padding(top = 10.dp),
+            color = AppTheme.colors.overflowOrange
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
-                text ="Answers (${answers.size})",
+                text = "Answers (${answers.size})",
                 style = AppTheme.typography.titleMedium,
                 color = AppTheme.colors.overflowOrange,
             )
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { filtersExpanded = !filtersExpanded }) {
+            IconButton(
+                onClick = { filtersExpanded = !filtersExpanded }
+            ) {
                 Icon(
                     imageVector = if (filtersExpanded) Icons.AutoMirrored.Filled.AlignHorizontalLeft else Icons.AutoMirrored.Filled.AlignHorizontalRight,
                     contentDescription = if (filtersExpanded) "Hide sort options" else "Show sort options",
@@ -283,7 +294,8 @@ fun QuestionContent(
             AnswerCard(
                 answer = answer,
                 isClickable = !isFromCache,
-                onClick = { onAnswerSelected(answer.answerId) })
+                onClick = { onAnswerSelected(answer.answerId) }
+            )
         }
     }
 }
@@ -373,7 +385,9 @@ fun AnswerCard(
             else AppTheme.colors.cardBackground
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
             Row {
                 Text(
                     text = answer.author,
@@ -403,7 +417,8 @@ fun AnswerCard(
             if (answer.body.isNotBlank()) {
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 8.dp),
-                    color = AppTheme.colors.overflowOrange)
+                    color = AppTheme.colors.overflowOrange
+                )
                 HtmlView(
                     html = answer.body,
                     modifier = Modifier.fillMaxWidth()
@@ -415,5 +430,3 @@ fun AnswerCard(
 
 private fun formatDate(epochSeconds: Long): String =
     SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(epochSeconds * 1000))
-
-

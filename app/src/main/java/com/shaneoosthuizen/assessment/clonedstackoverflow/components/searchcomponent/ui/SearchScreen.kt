@@ -135,8 +135,6 @@ fun SearchScreen(
                 QuestionControls(viewModel)
                 ShowQuestions(onQuestionSelected, viewModel)
             }
-
-
         }
     }
 }
@@ -158,7 +156,9 @@ fun SearchControls(viewModel: SearchViewModel) {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = { searchFiltersExpanded = !searchFiltersExpanded }) {
+            IconButton(
+                onClick = { searchFiltersExpanded = !searchFiltersExpanded }
+            ) {
                 Icon(
                     imageVector = if (searchFiltersExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = if (searchFiltersExpanded) "Hide filters" else "Show filters",
@@ -176,10 +176,12 @@ fun SearchControls(viewModel: SearchViewModel) {
                 },
                 trailingIcon = {
                     if (searchText.isNotEmpty()) {
-                        IconButton(onClick = {
-                            viewModel.updateSearchText("")
-                            viewModel.getQuestions()
-                        }) {
+                        IconButton(
+                            onClick = {
+                                viewModel.updateSearchText("")
+                                viewModel.getQuestions()
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = "Clear search",
@@ -222,8 +224,7 @@ fun SearchControls(viewModel: SearchViewModel) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
-                )
-                {
+                ) {
                     Text(
                         text = "Search Options",
                         style = AppTheme.typography.titleMedium,
@@ -232,7 +233,6 @@ fun SearchControls(viewModel: SearchViewModel) {
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
-
 
                 FilterCard(title = "Sort by") {
                     FilterGrid(
@@ -298,7 +298,9 @@ fun QuestionControls(viewModel: SearchViewModel) {
         }
         QuestionAmount(viewModel)
     }
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         AnimatedVisibility(
             visible = questionFiltersExpanded,
             enter = expandVertically() + fadeIn(),
@@ -428,9 +430,7 @@ fun <T> FilterGrid(
                     colors = RadioButtonDefaults.colors(
                         selectedColor = AppTheme.colors.overflowOrange,
                     ),
-                    onClick = {
-                        onSelected(item)
-                    }
+                    onClick = { onSelected(item) }
                 )
                 Text(
                     text = displayName(item),
@@ -504,7 +504,9 @@ fun QuestionCard(
             containerColor = AppTheme.colors.cardBackground
         )
     ) {
-        Column(modifier = Modifier.padding(12.dp)) {
+        Column(
+            modifier = Modifier.padding(12.dp)
+        ) {
             Text(
                 text = question.title,
                 style = AppTheme.typography.titleMedium,
@@ -516,7 +518,9 @@ fun QuestionCard(
                 color = AppTheme.colors.username,
                 modifier = Modifier.padding(top = 2.dp)
             )
-            Row(modifier = Modifier.padding(top = 6.dp)) {
+            Row(
+                modifier = Modifier.padding(top = 6.dp)
+            ) {
                 Text(
                     text = "Score: ${question.score}",
                     style = AppTheme.typography.labelSmall,

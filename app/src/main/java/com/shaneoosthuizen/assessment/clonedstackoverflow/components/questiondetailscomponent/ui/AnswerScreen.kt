@@ -52,23 +52,28 @@ fun AnswerScreen(
         viewModel.loadAnswerWithComments(answerId)
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-            onClick = onBack,
+                onClick = onBack,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = AppTheme.colors.button,
                     contentColor = AppTheme.colors.text,
                 )
-        ) {
-            Icon(
-                imageVector = Icons.Sharp.KeyboardDoubleArrowLeft,
-                contentDescription = "Back"
-            )
-        }
+            ) {
+                Icon(
+                    imageVector = Icons.Sharp.KeyboardDoubleArrowLeft,
+                    contentDescription = "Back"
+                )
+            }
             Text(
                 text = "Answer Details",
                 style = AppTheme.typography.headlineSmall,
@@ -78,13 +83,17 @@ fun AnswerScreen(
         }
         when {
             isLoading -> Box(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }
             error != null -> Box(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text("Error: $error", color = AppTheme.colors.error)
@@ -95,7 +104,9 @@ fun AnswerScreen(
                 modifier = Modifier.weight(1f)
             )
             else -> Box(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text("No data")
@@ -127,7 +138,7 @@ fun AnswerContent(
         item {
             Row(
                 modifier = Modifier
-                .fillMaxWidth()
+                    .fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier
@@ -162,7 +173,10 @@ fun AnswerContent(
                 modifier = Modifier.padding(vertical = 10.dp),
                 color = AppTheme.colors.overflowOrange
             )
-            HtmlView(html = answer.body, modifier = Modifier.fillMaxWidth())
+            HtmlView(
+                html = answer.body,
+                modifier = Modifier.fillMaxWidth()
+            )
             HorizontalDivider(
                 modifier = Modifier
                     .padding(vertical = 12.dp),
@@ -200,9 +214,11 @@ fun CommentCard(comment: Comment) {
             .padding(vertical = 3.dp),
         colors = CardDefaults.cardColors(
             containerColor = AppTheme.colors.cardBackground,
-        ),
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp)
         ) {
-        Column(modifier = Modifier.padding(10.dp)) {
             Row {
                 Text(
                     text = comment.author,
@@ -210,11 +226,11 @@ fun CommentCard(comment: Comment) {
                     color = AppTheme.colors.username,
                     modifier = Modifier.weight(1f)
                 )
-                    Text(
-                        text = "Score: ${comment.score}",
-                        style = AppTheme.typography.labelSmall,
-                        color = AppTheme.colors.text,
-                    )
+                Text(
+                    text = "Score: ${comment.score}",
+                    style = AppTheme.typography.labelSmall,
+                    color = AppTheme.colors.text,
+                )
             }
             Text(
                 text = comment.body,
